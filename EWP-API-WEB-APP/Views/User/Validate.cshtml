@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "Account Validation";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="card shadow mt-5">
+        <div class="card-body">
+            <h2 class="card-title text-center mb-4">Account Validation</h2>
+            <form method="post" action="/User/ValidateOTP" class="needs-validation" novalidate>
+                <div class="form-group">
+                    <label for="otp">Enter the OTP:</label>
+                    <input type="text" id="otp" name="OTPForm" class="form-control" required />
+                    <div class="invalid-feedback">Please enter the OTP.</div>
+                    @if (ViewBag.ValidationStatus != null && ViewBag.ValidationStatus == -1)
+                    {
+                        <div class="alert alert-danger mt-2" role="alert">
+                            Error generating email server-side
+                        </div>
+                    }
+
+                    @if (ViewBag.ValidationStatus != null && ViewBag.ValidationStatus == 2)
+                    {
+                        <div class="alert alert-danger mt-2" role="alert">
+                            Invalid Token
+                        </div>
+                    }
+
+                    @if (ViewBag.ValidationStatus != null && ViewBag.ValidationStatus == 3)
+                    {
+                        <div class="alert alert-primary mt-2" role="alert">
+                            Email sent
+                        </div>
+                    }
+                  
+                </div>
+                <div class="text-center mt-2">
+                    <button id="validate" type="submit" class="btn btn-primary" >Validate</button>
+                    <button onclick="showValidateButton()" asp-action="SendEmail" class="btn btn-info">Send Verification Email</button>
+                </div>
+
+                
+            </form>
+
+
+        </div>
+    </div>
+</div>

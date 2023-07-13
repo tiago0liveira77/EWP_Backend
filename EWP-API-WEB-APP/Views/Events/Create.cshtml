@@ -1,0 +1,99 @@
+﻿@model EWP_API_WEB_APP.Models.Data.Events
+
+@{
+    ViewData["Title"] = "Create Events";
+}
+
+<div class="container">
+    <h1 class="text-center mt-4">Create new Event</h1>
+    <hr />
+
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-6">
+            <form asp-action="Create" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label">Event Name:</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label mt-3">Description:</label>
+                    <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="StartingDate" class="control-label mt-3">Starting date:</label>
+                    <input asp-for="StartingDate" class="form-control" type="date" />
+                    <span asp-validation-for="StartingDate" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="EndingDate" class="control-label mt-3">Ending date:</label>
+                    <input asp-for="EndingDate" class="form-control" type="date" />
+                    <span asp-validation-for="EndingDate" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Location" class="control-label mt-3">Location:</label>
+                    <input asp-for="Location" class="form-control" />
+                    <span asp-validation-for="Location" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Type" class="control-label mt-3">Event type:</label>
+                    <select asp-for="Type" class="form-control" name="type">
+                        <option selected disabled value="">Choose an event type...</option>
+                        @foreach (var eventType in ViewData["eventsType"] as IList<string>)
+                        {
+                            <option value="@eventType">@eventType</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Type" class="text-danger"></span>
+                </div>
+
+                <label class="form-label mt-3" for="Ficheiro">Image:</label>
+                <input type="file" name="Ficheiro" class="form-control" id="Ficheiro" />
+
+
+                <div class="form-group mt-3">
+                    <div>
+                        <img id="previewImage" class="img-fluid" />
+                    </div>
+                </div>
+
+                <div class="form-group text-center mt-4">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Preview the selected image
+        function previewImage(event) {
+            var input = event.target;
+            var reader = new FileReader();
+
+            reader.onload = function () {
+                var preview = document.getElementById("previewImage");
+                preview.src = reader.result;
+                preview.style.display = "block";
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+
+        // Attach event listener to the file input
+        var fileInput = document.getElementById("Ficheiro");
+        fileInput.addEventListener("change", previewImage);
+    </script>
+}

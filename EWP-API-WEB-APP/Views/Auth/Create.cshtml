@@ -1,0 +1,97 @@
+﻿@model EWP_API_WEB_APP.Models.Data.Users
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container mb-5 mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="card-title mb-0">Create new account</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div class="form-group mt-1">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="UserName" class="form-control" required value="@Model.UserName">
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label for="fullname">Full Name</label>
+                            <input type="text" id="fullname" name="Name" class="form-control" required value="@Model.Name">                         
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                      
+                        <div class="form-group mt-2">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="Email" class="form-control" required value="@Model.Email">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label for="PhoneNumber">Phone Number</label>
+                            <input type="text" id="PhoneNumber" name="PhoneNumber" class="form-control" required value="@Model.PhoneNumber">
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="Password" class="form-control" required>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" id="confirmPassword" name="ConfirmPassword" class="form-control" required>
+                        </div>                    
+                        <div class="form-group mt-2">
+                            <label for="roleChoosed">Role</label>
+                            <select id="roleChoosed" name="roleChoosed" class="form-control" required>
+                                <option selected disabled value="">Select a type of account</option>
+                                <option value="Client">Client</option>
+                                <option value="Enterprise">Enterprise</option>
+                            </select>
+                        </div>
+
+                        <label class="form-label mt-3" for="image">Profile image:</label>
+                        <input type="file" name="image" class="form-control" id="image" />
+
+                        <div class="form-group mt-3">
+                            <div>
+                                <img id="previewImage" class="img-fluid" />
+                            </div>
+                        </div>
+
+                        <span id="errorRegister" class="text-danger mt-1">@ViewData["errorCreatingUser"]</span>
+                        <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-primary">Register</button>
+                            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Preview the selected image
+        function previewImage(event) {
+            var input = event.target;
+            var reader = new FileReader();
+
+            reader.onload = function () {
+                var preview = document.getElementById("previewImage");
+                preview.src = reader.result;
+                preview.style.display = "block";
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+
+        // Attach event listener to the file input
+        var fileInput = document.getElementById("image");
+        fileInput.addEventListener("change", previewImage);
+    </script>
+}

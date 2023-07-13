@@ -1,0 +1,81 @@
+﻿@* Tickets page *@
+@model IEnumerable<EWP_API_WEB_APP.Models.Data.Tickets>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container">
+    <h1>List of Tickets @if (ViewData["eventName"] != null)
+        {
+            <i>@ViewData["eventName"]</i>
+        }
+    </h1>
+    @if (User.Identity.IsAuthenticated && (bool)ViewData["showCreateButton"])
+    {
+        <p>
+            <a asp-action="Create" type="submit" class="btn btn-primary">Create New Ticket for <i>@ViewData["eventName"]</i></a>
+        </p>
+    }
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div class="card ticket-card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nome)</h5>
+                        <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
+                        <div class="row">
+                            <div class="col">
+                                <span class="badge bg-primary">@Html.DisplayFor(modelItem => item.Price) €</span>
+                                @if (item.Selling > 0)
+                                {
+                                    <span class="badge bg-success">Available</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Sold Out</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            if (item.Event.ListaUtilizadores.Any(u => u.UserName == User.Identity.Name))
+                            {
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning me-2">Edit</a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info me-2">Details</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                            }
+                            else if (item.ListaUtilizadores.Any(u => u.UserName == User.Identity.Name))
+                            {
+                                @if (ViewData["eventName"] != null)
+                                {
+                                    <span><b>You already bought this ticket!</b></span>
+                                }
+                                
+                            }
+                            else
+                            {
+                                if (item.Selling > 0)
+                                {
+                                    <a asp-action="BuyTicket" asp-route-id="@item.Id" class="btn btn-danger">Buy Ticket</a>
+                                }
+                                else
+                                {
+                                    <span><b>No tickets available.</b></span>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            <span><b>Login to buy tickets.</b></span>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

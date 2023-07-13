@@ -1,0 +1,91 @@
+﻿@model EWP_API_WEB_APP.Models.Data.Users
+
+@{
+    ViewData["Title"] = "Profile";
+}
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="card-title mb-0">User Profile</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <img src="img/uploadedProfileImages/@ViewData["image"]" class="img-fluid rounded-circle mb-4 profile-image" alt="Profile Picture">
+                            <div class="text-center">
+                                @if (User.IsInRole("Client"))
+                                {
+                                    <a href="@Url.Action("Index", "Tickets", new { isMyTickets = true })" class="btn btn-primary btn-sm">My Tickets</a>
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("Index", "Events", new { isMyEvents = true })" class="btn btn-primary btn-sm">My Events</a>
+                                }
+                            </div>
+
+                        </div>
+                        <div class="col-md-8 profile-info">
+                            <h5 class="card-subtitle mb-4">Personal Information</h5>
+                            <div class="mb-3">
+                                <strong>Username:</strong> @Model.UserName
+                            </div>
+                            <div class="mb-3">
+                                <strong>Full Name:</strong> @Model.Name
+                            </div>
+                            <div class="mb-3">
+                                <strong>Email:</strong> @Model.Email
+                            </div>
+                            <div class="mb-3">
+                                <strong>Email Confirmation:</strong> @Model.EmailConfirmed
+                            </div>
+                            <div class="mb-3">
+                                <strong>Phone Number:</strong> @Model.PhoneNumber
+                            </div>
+                            <div class="mb-3">
+                                <strong>Role:</strong> @(User.IsInRole("Client") ? "Client" : "Enterprise")
+                            </div>
+                            <div class="mb-3">
+                                <strong>Status:</strong>
+                                @switch (Model.Status)
+                                {
+                                    case 1:
+                                        <span class="status-badge badge bg-info text-white">Pending Validation</span>
+                                        <form asp-action="Validate" method="post" class="d-inline">
+                                            <button type="submit" class="btn btn-info btn-block mt-3">Validate</button>
+                                        </form>
+                                        break;
+                                    case 2:
+                                        <span class="status-badge badge bg-success">Active</span>
+                                        break;
+                                    case 3:
+                                        <span class="status-badge badge bg-secondary">Inactive</span>
+                                        break;
+                                    case 4:
+                                        <span class="status-badge badge bg-danger">Blocked</span>
+                                        break;
+                                    default:
+                                        <span class="status-badge badge bg-warning">Unknown</span>
+                                        break;
+                                }
+                            </div>
+                            <div class="mb-3">
+                                <strong>Registration Date:</strong> @Model.CreationDate.ToString("dd-MM-yyyy")
+                            </div>
+                            <div class="mb-3">
+                                <strong>Last Login:</strong> @Model.LastLoginDate.ToString("dd-MM-yyyy HH:mm")
+                            </div>
+                            <div class="mt-5">
+                                <a asp-action="Edit" class="btn btn-primary btn-block">Edit Profile</a>
+                                <form asp-action="Logout" asp-controller="Auth" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-danger btn-block">Logout</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

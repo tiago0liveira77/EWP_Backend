@@ -1,0 +1,121 @@
+﻿@using EWP_API_WEB_APP.Models.Data;
+@model EWP_API_WEB_APP.Models.Data.Events
+
+@{
+    ViewData["Title"] = "Edit Events";
+}
+
+<div class="container">
+    <h1 class="text-center mt-4">Edit Event</h1>
+    <hr />
+
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-6">
+            <form asp-action="Edit" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <input type="hidden" asp-for="Id" />
+
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label">Event Name:</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label mt-3">Description:</label>
+                    <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="StartingDate" class="control-label mt-3">Starting date:</label>
+                    <input asp-for="StartingDate" class="form-control" type="date" />
+                    <span asp-validation-for="StartingDate" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="EndingDate" class="control-label mt-3">Ending date:</label>
+                    <input asp-for="EndingDate" class="form-control" type="date" />
+                    <span asp-validation-for="EndingDate" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Location" class="control-label mt-3">Location:</label>
+                    <input asp-for="Location" class="form-control" />
+                    <span asp-validation-for="Location" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Type" class="control-label mt-3">Event type:</label>
+                    @Html.DropDownList("EventType", ViewBag.Eventype, null, htmlAttributes: new { @class = "form-control"})
+                    <span asp-validation-for="Type" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Ficheiro" class="control-label mt-3">Image:</label>
+                    <input class="form-control" type="file" name="Ficheiro" id="Ficheiro" />
+                    <span asp-validation-for="Ficheiro" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label mt-3">Current image:</label>
+                    <div>
+                        @if (!string.IsNullOrEmpty(Model.Ficheiro))
+                        {
+                            <img id="previewImage" src="~/img/uploadedEventImages/@Model.Ficheiro" alt="Current Image" class="img-fluid" />
+                        }
+                    </div>
+                    <span class="text-danger"></span>
+                </div>
+
+
+                <div class="form-group text-center mt-4">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                </div>
+        </form>
+
+        <h1> Add More Event Owners </h1>
+        <form method="post" action="/Events/AddOwner" class="needs-validation" novalidate>
+
+            <div class="form-group">
+                <input type="hidden" asp-for="Id" />
+                <label for="email">Email of the owner do add:</label>
+                <input type="email" id="email" name="Email" class="form-control" value="@ViewBag.Email" />
+            </div>
+
+            <div class="text-center mt-5">
+                <button type="submit" class="btn btn-primary">Add Owner</button>
+            </div>
+        </form>
+
+            
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Preview the selected image
+        function previewImage(event) {
+            var input = event.target;
+            var reader = new FileReader();
+
+            reader.onload = function () {
+                var preview = document.getElementById("previewImage");
+                preview.src = reader.result;
+                preview.style.display = "block";
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+
+        // Attach event listener to the file input
+        var fileInput = document.getElementById("Ficheiro");
+        fileInput.addEventListener("change", previewImage);
+    </script>
+}

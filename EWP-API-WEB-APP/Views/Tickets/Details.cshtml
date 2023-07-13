@@ -1,0 +1,57 @@
+﻿@model EWP_API_WEB_APP.Models.Data.Tickets
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container mb-5">
+    <h1 class="text-center mt-4">Ticket Details</h1>
+    <hr />
+
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Ticket Information</h4>
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-3">
+                    <strong> @Html.DisplayNameFor(model => model.Nome) </strong>
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Nome)
+                </dd>
+
+                <dt class="col-sm-3">
+                    <strong> @Html.DisplayNameFor(model => model.Description) </strong>
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
+
+                <dt class="col-sm-3">
+                    <strong>@Html.DisplayNameFor(model => model.Price)</strong>
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Price) €
+                </dd>
+
+                <dt class="col-sm-3">
+                    <strong>@Html.DisplayNameFor(model => model.Selling)</strong>
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Selling)
+                </dd>
+
+                <dt class="col-sm-3">
+                    <strong>@Html.DisplayNameFor(model => model.Event)</strong>
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Event.Name)
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="text-center mt-3">
+        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Edit Ticket</a>
+        <a asp-action="Index" asp-route-id="@Model.Event.Id" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
